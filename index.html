@@ -7,23 +7,30 @@
     <style>
         body { font-family: Arial; background: #f4f4f4; padding: 20px; max-width: 500px; margin: auto; }
         header { text-align: center; margin-bottom: 20px; }
-        .abas { display: flex; gap: 10px; margin-bottom: 20px; }
-        .btn-aba { padding: 10px 20px; border: none; background: #ccc; cursor: pointer; border-radius: 5px; flex: 1; }
-        .btn-aba.ativo { background: #0046a0; color: white; }
-        .conteudo-aba { display: none; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .conteudo-aba.ativo { display: block; }
-        .campo { margin-bottom: 15px; }
-        .campo label { display: block; margin-bottom: 5px; font-weight: bold; }
-        .campo input, .campo select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
+        header h2 { color: #0046a0; }
+       .abas { display: flex; gap: 10px; margin-bottom: 20px; }
+       .btn-aba { padding: 10px 20px; border: none; background: #ccc; cursor: pointer; border-radius: 5px; flex: 1; font-weight: bold; }
+       .btn-aba.ativo { background: #0046a0; color: white; }
+       .conteudo-aba { display: none; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+       .conteudo-aba.ativo { display: block; }
+       .campo { margin-bottom: 15px; }
+       .campo label { display: block; margin-bottom: 5px; font-weight: bold; }
+       .campo input,.campo select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; font-size: 16px; }
         #btnLancar { width: 100%; padding: 12px; background: #0046a0; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; font-weight: bold; }
+        #btnLancar:disabled { background: #aaa; }
+        #mensagem { margin-top: 15px; padding: 10px; border-radius: 5px; text-align: center; font-weight: bold; display: none; }
+       .sucesso { background: #d4edda; color: #155724; display: block!important; }
+       .erro { background: #f8d7da; color: #721c24; display: block!important; }
     </style>
 </head>
 <body>
     <header><h2>Controle de Retirada de Produtos</h2></header>
+
     <nav class="abas">
         <button class="btn-aba ativo" onclick="mostrarAba(event, 'lancamento')">Lançar Retirada</button>
         <button class="btn-aba" onclick="mostrarAba(event, 'configuracao')">Configuração</button>
     </nav>
+
     <main id="lancamento" class="conteudo-aba ativo">
         <form id="form-retirada">
             <div class="campo"><label>Data:</label><input type="date" id="data" name="data" required></div>
@@ -45,18 +52,60 @@
         </form>
         <div id="mensagem"></div>
     </main>
+
     <main id="configuracao" class="conteudo-aba">
         <h3>Sobre o Sistema</h3>
         <p>Este sistema foi desenvolvido para automatizar e digitalizar o processo de retirada de materiais.</p>
         <p><b>Desenvolvido por:</b> Ana Costa - Facilities - Compras Corporativas</p>
     </main>
+
     <script>
+    const URL_APPS_SCRIPT = 'https://script.google.com/macros/s/AKfycbwNIEcXl8zdHB-rCdosWGHQDn7CPP21evhlJITPXJ5UN_lGocdPmek39ykgpg4x45f3/exec';
+
     function mostrarAba(event, aba) {
         document.querySelectorAll('.conteudo-aba').forEach(a => a.classList.remove('ativo'));
         document.querySelectorAll('.btn-aba').forEach(b => b.classList.remove('ativo'));
         document.getElementById(aba).classList.add('ativo');
         event.target.classList.add('ativo');
     }
+
+    document.getElementById('form-retirada').addEventListener('submit', function(e){
+      e.preventDefault();
+      const btn = document.getElementById('btnLancar');
+      const msg = document.getElementById('mensagem');
+      const formData = new FormData(this);
+      const data = Object.fromEntries(formData);
+
+      btn.disabled = true;
+      btn.innerText = 'Enviando...';
+      msg.className = '';
+      msg.innerText = '';
+
+      fetch(URL_APPS_SCRIPT, {
+        method: 'POST',
+        body: JSON.stringify(data)
+      })
+     .then(res => res.json())
+     .then(() => {
+        msg.className = 'sucesso';
+        msg.innerText = 'Lançado com sucesso!';
+        this.reset();
+        document.getElementById('data').value = new Date().toISOString().split('T')[0];
+      })
+     .catch(err => {
+        msg.className = 'erro';
+        msg.innerText = 'Erro ao enviar. Tente novamente.';
+        console.error(err);
+      })
+     .finally(() => {
+        btn.disabled = false;
+        btn.innerText = 'Lançar Retirada';
+      });
+    });
+
+    // Preenche data de hoje automático
+    document.getElementById('data').value = new Date().toISOString().split('T')[0];
     </script>
 </body>
 </html>
+
