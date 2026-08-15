@@ -23,17 +23,19 @@
   </style>
 </head>
 <body>
+
   <div class="container">
     <h2>Lançamento de Materiais</h2>
+    
     <form id="formSuprimentos">
       <label for="nome">Nome do Colaborador</label>
-      <input type="text" id="nome" required>
+      <input type="text" id="nome" placeholder="Digite seu nome" required>
 
       <label for="area">Área / Setor</label>
-      <input type="text" id="area" required>
+      <input type="text" id="area" placeholder="Ex: CSC, MTG, Fiscal..." required>
 
       <label for="qtd">Quantidade</label>
-      <input type="number" id="qtd" min="1" value="1" required>
+      <input type="number" id="qtd" placeholder="Ex: 1" min="1" value="1" required>
 
       <label for="produto">Produto</label>
       <select id="produto" required>
@@ -99,28 +101,28 @@
       btn.textContent = "Enviando...";
       msg.textContent = "";
 
-      const dados = {
-        nome: document.getElementById("nome").value,
-        area: document.getElementById("area").value,
-        qtd: document.getElementById("qtd").value,
-        produto: document.getElementById("produto").value
-      };
+      // MANDA COMO FORMDATA - ISSO EVITA O CORS
+      const formData = new FormData();
+      formData.append("nome", document.getElementById("nome").value);
+      formData.append("area", document.getElementById("area").value);
+      formData.append("qtd", document.getElementById("qtd").value);
+      formData.append("produto", document.getElementById("produto").value);
 
       try {
         const response = await fetch(URL_API, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(dados)
+          body: formData // sem header de JSON
         });
-        const resultado = await response.json();
         
-        if(resultado.status === "sucesso"){
+        const resultado = await response.text();
+        
+        if(resultado.includes("sucesso")){
           msg.textContent = "Lançamento registrado com sucesso!";
           msg.className = "sucesso";
           e.target.reset();
           document.getElementById("qtd").value = 1;
         } else {
-          throw new Error(resultado.msg);
+          throw new Error(resultado);
         }
       } catch (err) {
         msg.textContent = "Erro: " + err.message;
