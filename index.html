@@ -1,129 +1,181 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Retirada de Materiais - Magalu</title>
-    <style>
-        body { font-family: Arial; background: #f4f4f4; padding: 20px; max-width: 500px; margin: auto; }
-        header { text-align: center; margin-bottom: 20px; }
-        header h2 { color: #0046a0; }
-       .abas { display: flex; gap: 10px; margin-bottom: 20px; }
-       .btn-aba { padding: 10px 20px; border: none; background: #ccc; cursor: pointer; border-radius: 5px; flex: 1; font-weight: bold; }
-       .btn-aba.ativo { background: #0046a0; color: white; }
-       .conteudo-aba { display: none; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-       .conteudo-aba.ativo { display: block; }
-       .campo { margin-bottom: 15px; }
-       .campo label { display: block; margin-bottom: 5px; font-weight: bold; }
-       .campo input,.campo select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; font-size: 16px; }
-        #btnLancar { width: 100%; padding: 12px; background: #0046a0; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; font-weight: bold; }
-        #btnLancar:disabled { background: #aaa; }
-        #mensagem { margin-top: 15px; padding: 10px; border-radius: 5px; text-align: center; font-weight: bold; display: none; }
-       .sucesso { background: #d4edda; color: #155724; display: block!important; }
-       .erro { background: #f8d7da; color: #721c24; display: block!important; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lançamento - Materiais de Escritório</title>
+  <style>
+    * { box-sizing: border-box; font-family: Arial, sans-serif; }
+    body { 
+      background: #f5f5f5; 
+      display: flex; 
+      justify-content: center; 
+      align-items: center; 
+      min-height: 100vh; 
+      margin: 0; 
+      padding: 20px;
+    }
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 400px;
+    }
+    h2 {
+      text-align: center;
+      color: #0052cc;
+      margin-bottom: 20px;
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 15px;
+      margin-bottom: 5px;
+      color: #333;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 20px;
+      background: #0052cc;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:hover { background: #003d99; }
+    button:disabled { background: #aaa; cursor: not-allowed; }
+    #mensagem {
+      text-align: center;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    .sucesso { color: green; }
+    .erro { color: red; }
+  </style>
 </head>
 <body>
-    <header><h2>Controle de Retirada de Produtos</h2></header>
 
-    <nav class="abas">
-        <button class="btn-aba ativo" onclick="mostrarAba(event, 'lancamento')">Lançar Retirada</button>
-        <button class="btn-aba" onclick="mostrarAba(event, 'configuracao')">Configuração</button>
-    </nav>
+  <div class="container">
+    <h2>Lançamento de Materiais</h2>
+    
+    <form id="formSuprimentos">
+      
+      <label for="nome">Nome do Colaborador</label>
+      <input type="text" id="nome" placeholder="Digite o colaborador" required>
 
-    <main id="lancamento" class="conteudo-aba ativo">
-        <form id="form-retirada">
-            <div class="campo"><label>Data:</label><input type="date" id="data" name="data" required></div>
-            <div class="campo"><label>Nome:</label><input type="text" id="nome" name="nome" required></div>
-            <div class="campo"><label>Setor:</label><input type="text" id="setor" name="setor" required></div>
-            <div class="campo"><label>Material:</label>
-                <select id="material" name="material" required>
-                    <option value="">Selecione o material</option>
-                   <option>Caneta</option>
-<option>Clipes</option>
-<option>Caderno pequeno</option>
-<option>Caderno grande</option>
-<option>Pilha AA</option>
-<option>Pilha AAA</option>
-<option>Fita de embalagens</option>
-<option>Fita crepe</option>
-<option>Cola</option>
-<option>Super bonder</option>
-<option>Pincel atômico</option>
-<option>Pincel permanente</option>
-<option>Pincel Quadro branco</option>
-<option>Marca texto</option>
-<option>Lápis</option>
-<option>Grampos</option>
-<option>Etiqueta</option>
-<option>Régua</option>
-<option>Tesoura</option>
-<option>Borracha</option>
-<option>Apontador</option>
-<option>Pacote de copo</option>
-<option>Caixa arquivo</option>
-<option>Guardanapo</option>
-                </select>
-            </div>
-            <div class="campo"><label>Quantidade:</label><input type="number" id="quantidade" name="quantidade" min="1" required></div>
-            <button type="submit" id="btnLancar">Lançar Retirada</button>
-        </form>
-        <div id="mensagem"></div>
-    </main>
+      <label for="area">Área / Setor</label>
+      <input type="text" id="area" placeholder="Ex: CSC, MTG, Fiscal..." required>
 
-    <main id="configuracao" class="conteudo-aba">
-        <h3>Sobre o Sistema</h3>
-        <p>Este sistema foi desenvolvido para automatizar e digitalizar o processo de retirada de materiais.</p>
-        <p><b>Desenvolvido por:</b> Ana Costa - Facilities - Compras Corporativas</p>
-    </main>
+      <label for="qtd">Quantidade</label>
+      <input type="number" id="qtd" placeholder="Ex: 1" min="1" value="1" required>
 
-    <script>
-    const URL_APPS_SCRIPT = 'https://script.google.com/macros/s/AKfycbwNIEcXl8zdHB-rCdosWGHQDn7CPP21evhlJITPXJ5UN_lGocdPmek39ykgpg4x45f3/exec';
+      <label for="produto">Produto</label>
+      <select id="produto" required>
+        <option value="">Selecione o material</option>
+        <opition value="Apontador">Apontador</option>
+        <option value="Barbante">Barbante</option>
+        <option value="Bexiga">Bexiga</option>
+        <opition value="Borracha">Borracha</opition>    
+        <option value="Caderno grande">Caderno grande</option>
+        <option value="Caderno Médio">Caderno Médio</option>
+        <option value="Caderno pequeno">Caderno pequeno</option>
+        <opition value= "Caixa de Arquivo">Caixa de Arquivo</opition>    
+        <option value="Caneta">Caneta</option>
+        <option value="Cartolina">Cartolina</option>
+        <option value="Clipes">Clipes</option>
+        <option value="Cola">Cola</option>
+        <option value="Cola Bastão">Cola Bastão</option>
+        <option value="Elástico">Elástico</option>
+        <option value="Etiqueta">Etiqueta</option>
+        <option value="Fita crepe">Fita crepe</option>
+        <option value="Fita de embalagens">Fita de embalagens</option>
+        <option value="Fita Embalagem">Fita Embalagem</option>
+        <option value="Fita Zebrada">Fita Zebrada</option>
+        <option value="Flipchart">Flipchart</option>
+        <option value="Grampeador">Grampeador</option>
+        <option value="Grampos">Grampos</option>
+        <opition value= "Guardanapo">Guardanapo</opition>    
+        <option value="Lápis">Lápis</option>
+        <option value="Linha De Pesca">Linha De Pesca</option>
+        <option value="Marca texto">Marca texto</option>
+        <option value="Marca Texto">Marca Texto</option>
+        <opition value "Pacote de Copos Azul">Pacote de Copos Azul</opition> 
+        <opition value="Pacote de Copos Branco">Pacote de Copos Branco"</opition>    
+        <option value="Papel Pardo">Papel Pardo</option>
+        <option value="Pasta De Documentos">Pasta De Documentos</option>
+        <option value="Pilha AA">Pilha AA</option>
+        <option value="Pilha AAA">Pilha AAA</option>
+        <option value="Pincel atômico">Pincel atômico</option>
+        <option value="Pincel permanente">Pincel permanente</option>
+        <option value="Pincel Quadro branco">Pincel Quadro branco</option>
+        <option value="Post It">Post It</option>
+        <option value="Régua">Régua</option>
+        <option value="Super bonder">Super bonder</option>
+        <option value="Sulfite ( 50 folhas)">Sulfite ( 50 folhas)</option>
+        <opiton value"Tesoura">Tesoura</opiton>    
+      </select>
 
-    function mostrarAba(event, aba) {
-        document.querySelectorAll('.conteudo-aba').forEach(a => a.classList.remove('ativo'));
-        document.querySelectorAll('.btn-aba').forEach(b => b.classList.remove('ativo'));
-        document.getElementById(aba).classList.add('ativo');
-        event.target.classList.add('ativo');
-    }
+      <button type="submit" id="btnEnviar">Lançar</button>
+      <div id="mensagem"></div>
+    </form>
+  </div>
 
-    document.getElementById('form-retirada').addEventListener('submit', function(e){
+  <script>
+    const URL_API = "https://script.google.com/macros/s/AKfycbwG7WztphNFebd8G5wDsDYTDpQzEvaEjZK8GxrwRf835Gk6qnwoXIoKadVxJr6pEJzi/exec";
+    const form = document.getElementById("formSuprimentos");
+    const btn = document.getElementById("btnEnviar");
+    const msg = document.getElementById("mensagem");
+
+    form.addEventListener("submit", function(e) {
       e.preventDefault();
-      const btn = document.getElementById('btnLancar');
-      const msg = document.getElementById('mensagem');
-      const formData = new FormData(this);
-      const data = Object.fromEntries(formData);
-
+      
       btn.disabled = true;
-      btn.innerText = 'Enviando...';
-      msg.className = '';
-      msg.innerText = '';
+      btn.textContent = "Enviando...";
+      msg.textContent = "";
+      msg.className = "";
 
-      fetch(URL_APPS_SCRIPT, {
-        method: 'POST',
-        body: JSON.stringify(data)
+      const dados = {
+        nome: document.getElementById("nome").value,
+        area: document.getElementById("area").value,
+        qtd: document.getElementById("qtd").value,
+        produto: document.getElementById("produto").value
+      };
+
+      fetch(URL_API, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(dados)
       })
-     .then(res => res.json())
-     .then(() => {
-        msg.className = 'sucesso';
-        msg.innerText = 'Lançado com sucesso!';
-        this.reset();
-        document.getElementById('data').value = new Date().toISOString().split('T')[0];
+      .then(() => {
+        msg.textContent = "Lançamento registrado com sucesso!";
+        msg.className = "sucesso";
+        form.reset();
+        document.getElementById("qtd").value = 1;
       })
-     .catch(err => {
-        msg.className = 'erro';
-        msg.innerText = 'Erro ao enviar. Tente novamente.';
+      .catch((err) => {
+        msg.textContent = "Erro ao enviar. Tente novamente.";
+        msg.className = "erro";
         console.error(err);
       })
-     .finally(() => {
+      .finally(() => {
         btn.disabled = false;
-        btn.innerText = 'Lançar Retirada';
+        btn.textContent = "Lançar";
       });
     });
+  </script>
 
-    // Preenche data de hoje automático
-    document.getElementById('data').value = new Date().toISOString().split('T')[0];
-    </script>
 </body>
 </html>
-
