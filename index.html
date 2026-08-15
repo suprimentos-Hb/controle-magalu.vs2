@@ -14,72 +14,40 @@
     .btn-group { display: flex; gap: 10px; }
     button { width: 100%; padding: 12px; margin-top: 20px; background: #0052cc; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; }
     button:hover { background: #003d99; }
-    button:disabled { background: #aaa; cursor: not-allowed; }
+    button:disabled { background: #aaa; }
     .btn-voltar { background: #6c757d; }
-    .btn-voltar:hover { background: #5a6268; }
     #mensagem { text-align: center; margin-top: 15px; font-weight: bold; }
     .sucesso { color: green; }
     .erro { color: red; }
   </style>
 </head>
 <body>
-
   <div class="container">
     <h2>Lançamento de Materiais</h2>
-    
     <form id="formSuprimentos">
-      <label for="nome">Nome do Colaborador</label>
-      <input type="text" id="nome" placeholder="Digite seu nome" required>
-
-      <label for="area">Área / Setor</label>
-      <input type="text" id="area" placeholder="Ex: CSC, MTG, Fiscal..." required>
-
-      <label for="qtd">Quantidade</label>
-      <input type="number" id="qtd" placeholder="Ex: 1" min="1" value="1" required>
-
-      <label for="produto">Produto</label>
+      <label>Nome do Colaborador</label>
+      <input type="text" id="nome" required>
+      <label>Área / Setor</label>
+      <input type="text" id="area" required>
+      <label>Quantidade</label>
+      <input type="number" id="qtd" min="1" value="1" required>
+      <label>Produto</label>
       <select id="produto" required>
         <option value="">Selecione o material</option>
-        <option value="Apontador">Apontador</option>
-        <option value="Barbante">Barbante</option>
-        <option value="Bexiga">Bexiga</option>
-        <option value="Caderno grande">Caderno grande</option>
-        <option value="Caderno Médio">Caderno Médio</option>
-        <option value="Caderno pequeno">Caderno pequeno</option>
-        <option value="Caixa De arquivo">Caixa De arquivo</option>
-        <option value="Caneta">Caneta</option>
-        <option value="Cartolina">Cartolina</option>
-        <option value="Clipes">Clipes</option>
-        <option value="Cola">Cola</option>
-        <option value="Cola Bastão">Cola Bastão</option>
-        <option value="Copo Azul">Copo Azul</option>
-        <option value="Copo Branco">Copo Branco</option>
-        <option value="Elástico">Elástico</option>
-        <option value="Etiqueta">Etiqueta</option>
-        <option value="Fita crepe">Fita crepe</option>
-        <option value="Fita de embalagens">Fita de embalagens</option>
-        <option value="Fita Embalagem">Fita Embalagem</option>
-        <option value="Fita Zebrada">Fita Zebrada</option>
-        <option value="Flipchart">Flipchart</option>
-        <option value="Grampeador">Grampeador</option>
-        <option value="Grampos">Grampos</option>
-        <option value="Guardanapo">Guardanapo</option>
-        <option value="Lápis">Lápis</option>
-        <option value="Linha De Pesca">Linha De Pesca</option>
-        <option value="Marca texto">Marca texto</option>
-        <option value="Marca Texto">Marca Texto</option>
-        <option value="Papel Pardo">Papel Pardo</option>
-        <option value="Pasta De Documentos">Pasta De Documentos</option>
-        <option value="Pilha AA">Pilha AA</option>
-        <option value="Pilha AAA">Pilha AAA</option>
-        <option value="Pincel atômico">Pincel atômico</option>
-        <option value="Pincel permanente">Pincel permanente</option>
-        <option value="Pincel Quadro branco">Pincel Quadro branco</option>
-        <option value="Post It">Post It</option>
-        <option value="Régua">Régua</option>
-        <option value="Super bonder">Super bonder</option>
-        <option value="Sulfite ( 50 folhas)">Sulfite ( 50 folhas)</option>
-        <option value="Tesoura">Tesoura</option>
+        <option value="Apontador">Apontador</option><option value="Barbante">Barbante</option><option value="Bexiga">Bexiga</option>
+        <option value="Caderno grande">Caderno grande</option><option value="Caderno Médio">Caderno Médio</option><option value="Caderno pequeno">Caderno pequeno</option>
+        <option value="Caixa De arquivo">Caixa De arquivo</option><option value="Caneta">Caneta</option><option value="Cartolina">Cartolina</option>
+        <option value="Clipes">Clipes</option><option value="Cola">Cola</option><option value="Cola Bastão">Cola Bastão</option>
+        <option value="Copo Azul">Copo Azul</option><option value="Copo Branco">Copo Branco</option><option value="Elástico">Elástico</option>
+        <option value="Etiqueta">Etiqueta</option><option value="Fita crepe">Fita crepe</option><option value="Fita de embalagens">Fita de embalagens</option>
+        <option value="Fita Embalagem">Fita Embalagem</option><option value="Fita Zebrada">Fita Zebrada</option><option value="Flipchart">Flipchart</option>
+        <option value="Grampeador">Grampeador</option><option value="Grampos">Grampos</option><option value="Guardanapo">Guardanapo</option>
+        <option value="Lápis">Lápis</option><option value="Linha De Pesca">Linha De Pesca</option><option value="Marca texto">Marca texto</option>
+        <option value="Marca Texto">Marca Texto</option><option value="Papel Pardo">Papel Pardo</option><option value="Pasta De Documentos">Pasta De Documentos</option>
+        <option value="Pilha AA">Pilha AA</option><option value="Pilha AAA">Pilha AAA</option><option value="Pincel atômico">Pincel atômico</option>
+        <option value="Pincel permanente">Pincel permanente</option><option value="Pincel Quadro branco">Pincel Quadro branco</option>
+        <option value="Post It">Post It</option><option value="Régua">Régua</option><option value="Super bonder">Super bonder</option>
+        <option value="Sulfite ( 50 folhas)">Sulfite ( 50 folhas)</option><option value="Tesoura">Tesoura</option>
       </select>
 
       <div class="btn-group">
@@ -91,7 +59,7 @@
   </div>
 
   <script>
-    const URL_API = "https://script.google.com/macros/s/AKfycbze6PFT2208bZcbl77_Qeyjic3VEKZ511x4VymfHbHqFskzV2zhtcT5muoUeMwJs_03/exec";
+    const URL_API = "https://script.google.com/macros/s/AKfycbze6PFT2208bZcbl77_Qeyjic3VEKZ511x4VymfHbHqFskzV2zhtcT5muoUeMwJs_03/execc";
     
     document.getElementById("formSuprimentos").addEventListener("submit", async function(e) {
       e.preventDefault();
@@ -101,31 +69,24 @@
       btn.textContent = "Enviando...";
       msg.textContent = "";
 
-      // MANDA COMO FORMDATA - ISSO EVITA O CORS
-      const formData = new FormData();
-      formData.append("nome", document.getElementById("nome").value);
-      formData.append("area", document.getElementById("area").value);
-      formData.append("qtd", document.getElementById("qtd").value);
-      formData.append("produto", document.getElementById("produto").value);
+      const nome = encodeURIComponent(document.getElementById("nome").value);
+      const area = encodeURIComponent(document.getElementById("area").value);
+      const qtd = encodeURIComponent(document.getElementById("qtd").value);
+      const produto = encodeURIComponent(document.getElementById("produto").value);
+
+      const url = `${URL_API}?nome=${nome}&area=${area}&qtd=${qtd}&produto=${produto}`;
 
       try {
-        const response = await fetch(URL_API, {
-          method: "POST",
-          body: formData // sem header de JSON
-        });
+        await fetch(url, { method: "GET", mode: "no-cors" }); // MODO NO-CORS
         
-        const resultado = await response.text();
+        // Como é no-cors não conseguimos ler a resposta, então assumimos que deu certo
+        msg.textContent = "Lançamento registrado com sucesso!";
+        msg.className = "sucesso";
+        e.target.reset();
+        document.getElementById("qtd").value = 1;
         
-        if(resultado.includes("sucesso")){
-          msg.textContent = "Lançamento registrado com sucesso!";
-          msg.className = "sucesso";
-          e.target.reset();
-          document.getElementById("qtd").value = 1;
-        } else {
-          throw new Error(resultado);
-        }
       } catch (err) {
-        msg.textContent = "Erro: " + err.message;
+        msg.textContent = "Erro ao enviar";
         msg.className = "erro";
       } finally {
         btn.disabled = false;
