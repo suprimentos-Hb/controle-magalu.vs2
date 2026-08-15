@@ -7,18 +7,18 @@
   <style>
     * { box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; }
     body { background: #f0f2f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
- .container { background: white; padding: 30px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 420px; }
+   .container { background: white; padding: 30px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 420px; }
     h2 { text-align: center; color: #0052cc; margin-bottom: 25px; }
     label { font-weight: 600; display: block; margin-top: 15px; margin-bottom: 6px; color: #333; }
     input, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 15px; }
-    button { width: 100%; padding: 14px; margin-top: 15px; background: #0052cc; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; }
-    button:disabled { background: #aaa; }
- .btn-config { background: #6c757d; font-size: 14px; padding: 10px; }
- .btn-config:hover { background: #5a6268; }
+    button { width: 100%; padding: 14px; margin-top: 15px; background: #0052cc; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+    button:hover { background: #003d99; }
+    button:disabled { background: #aaa; cursor: not-allowed; }
+   .btn-config { background: #6c757d; font-size: 14px; padding: 10px; }
+   .btn-config:hover { background: #5a6268; }
     #mensagem { text-align: center; margin-top: 15px; font-weight: bold; min-height: 22px; }
- .sucesso { color: #28a745; }
- .erro { color: #dc3545; }
- .rodape { display: none; text-align: center; font-size: 12px; color: #555; margin-top: 20px; padding-top: 15px; border-top: 1px solid #eee; line-height: 1.5; }
+   .sucesso { color: #28a745; }
+   .erro { color: #dc3545; }
     iframe { display: none; }
   </style>
 </head>
@@ -27,7 +27,7 @@
     <h2>Lançamento de Materiais</h2>
 
     <form id="formSuprimentos"
-          action="https://script.google.com/macros/s/AKfycbwh2xdl14v_wWEpb4yr1aG4eNMyKdiMaIo1eGmGUH8CHkbZtsOQqdWX7B0tWB-d12N8/exec"
+          action="https://script.google.com/macros/s/AKfycbxy-wnRXfGtoqda3aU11cSdD2m3qYOH_tED6Ajll7FOckd3F_bS6-_tRYehYH241e13/exec"
           method="POST"
           target="iframe_oculto">
 
@@ -70,7 +70,6 @@
         <option value="Lápis">Lápis</option>
         <option value="Linha De Pesca">Linha De Pesca</option>
         <option value="Marca texto">Marca texto</option>
-        <option value="Marca Texto">Marca Texto</option>
         <option value="Papel Pardo">Papel Pardo</option>
         <option value="Pasta De Documentos">Pasta De Documentos</option>
         <option value="Pilha AA">Pilha AA</option>
@@ -86,13 +85,8 @@
       </select>
 
       <button type="submit" id="btnEnviar">Lançar</button>
-      <button type="button" class="btn-config" onclick="mostrarRodape()">Configurações</button>
+      <button type="button" class="btn-config" onclick="mostrarConfig()">Configurações</button>
       <div id="mensagem"></div>
-
-      <div id="rodape" class="rodape">
-        Desenvolvido por Ana Costa - Facilities - Compras Corporativas<br>
-        Conectado diretamente à Planilha de Controle Geral via API.
-      </div>
     </form>
   </div>
 
@@ -111,11 +105,9 @@
     window.enviado = function(){
       if(!clicou) return;
       clicou = false;
-
       try {
         const iframe = document.getElementsByName("iframe_oculto")[0];
         const resposta = iframe.contentDocument.body.innerText;
-
         if(resposta.includes("sucesso")){
           document.getElementById("mensagem").textContent = "Lançamento registrado com sucesso!";
           document.getElementById("mensagem").className = "sucesso";
@@ -126,18 +118,17 @@
           document.getElementById("mensagem").className = "erro";
         }
       } catch(e) {
-        document.getElementById("mensagem").textContent = "Erro 403: Verifique as permissões do Apps Script";
+        document.getElementById("mensagem").textContent = "Erro de permissão. Reimplante o Apps Script como 'Qualquer pessoa usando uma conta Google'";
         document.getElementById("mensagem").className = "erro";
       }
-
       document.getElementById("btnEnviar").disabled = false;
       document.getElementById("btnEnviar").textContent = "Lançar";
     }
-
     document.getElementsByName("iframe_oculto")[0].onload = window.enviado;
 
-    function mostrarRodape(){
-      document.getElementById("rodape").style.display = "block";
+    function mostrarConfig(){
+      // COLA AQUI O TEXTO QUE VOCÊ QUER QUE APAREÇA AO CLICAR
+      alert("Versão 1.0\nDesenvolvido por Ana Costa\nFacilities - Compras Corporativas");
     }
   </script>
 </body>
