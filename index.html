@@ -93,6 +93,81 @@
         clicou = false;
       }
     }
+    <!-- IFRAME OCULTO PRA RECEBER A RESPOSTA DO GOOGLE -->
+<iframe name="iframe_oculto" onload="enviado()"></iframe>
+
+<script>
+    let clicou = false;
+    
+    document.getElementById("formSuprimentos").addEventListener("submit", () => {
+      clicou = true;
+      document.getElementById("btnEnviar").disabled = true;
+      document.getElementById("btnEnviar").textContent = "Enviando...";
+      document.getElementById("mensagem").textContent = "";
+    });
+
+    function enviado(){
+      if(clicou){
+        document.getElementById("mensagem").textContent = "Lançamento registrado com sucesso!";
+        document.getElementById("mensagem").className = "sucesso";
+        document.getElementById("formSuprimentos").reset();
+        document.getElementById("qtd").value = 1;
+        document.getElementById("btnEnviar").disabled = false;
+        document.getElementById("btnEnviar").textContent = "Lançar";
+        clicou = false;
+      }
+    }
+<!-- IFRAME OCULTO PRA RECEBER A RESPOSTA DO GOOGLE -->
+<iframe name="iframe_oculto" onload="enviado()"></iframe>
+
+<script>
+    let clicou = false;
+    
+    document.getElementById("formSuprimentos").addEventListener("submit", () => {
+      clicou = true;
+      document.getElementById("btnEnviar").disabled = true;
+      document.getElementById("btnEnviar").textContent = "Enviando...";
+      document.getElementById("mensagem").textContent = "";
+    });
+
+    function enviado(){
+      if(clicou){
+        document.getElementById("mensagem").textContent = "Lançamento registrado com sucesso!";
+        document.getElementById("mensagem").className = "sucesso";
+        document.getElementById("formSuprimentos").reset();
+        document.getElementById("qtd").value = 1;
+        document.getElementById("btnEnviar").disabled = false;
+        document.getElementById("btnEnviar").textContent = "Lançar";
+        clicou = false;
+      }
+    }
+<!-- IFRAME OCULTO PRA RECEBER A RESPOSTA DO GOOGLE -->
+<iframe name="iframe_oculto" onload="enviado()"></iframe>
+
+<script>
+    let clicou = false;
+    
+    document.getElementById("formSuprimentos").addEventListener("submit", () => {
+      clicou = true;
+      document.getElementById("btnEnviar").disabled = true;
+      document.getElementById("btnEnviar").textContent = "Enviando...";
+      document.getElementById("mensagem").textContent = "";
+    });
+
+    function enviado(){
+      if(clicou){
+        document.getElementById("mensagem").textContent = "Lançamento registrado com sucesso!";
+        document.getElementById("mensagem").className = "sucesso";
+        document.getElementById("formSuprimentos").reset();
+        document.getElementById("qtd").value = 1;
+        document.getElementById("btnEnviar").disabled = false;
+        document.getElementById("btnEnviar").textContent = "Lançar";
+        clicou = false;
+      }
+    }
+</script>
+</body>
+</html>
   </script>
 </body>
 </html>
