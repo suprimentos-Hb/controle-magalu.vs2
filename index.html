@@ -6,64 +6,18 @@
   <title>Lançamento - Materiais de Escritório</title>
   <style>
     * { box-sizing: border-box; font-family: Arial, sans-serif; }
-    body { 
-      background: #f5f5f5; 
-      display: flex; 
-      justify-content: center; 
-      align-items: center; 
-      min-height: 100vh; 
-      margin: 0; 
-      padding: 20px;
-    }
-    .container {
-      background: white;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      width: 100%;
-      max-width: 400px;
-    }
-    h2 {
-      text-align: center;
-      color: #0052cc;
-      margin-bottom: 20px;
-    }
-    label {
-      font-weight: bold;
-      display: block;
-      margin-top: 15px;
-      margin-bottom: 5px;
-      color: #333;
-    }
-    input, select {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 16px;
-    }
+    body { background: #f5f5f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
+    .container { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
+    h2 { text-align: center; color: #0052cc; margin-bottom: 20px; }
+    label { font-weight: bold; display: block; margin-top: 15px; margin-bottom: 5px; color: #333; }
+    input, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; }
     .btn-group { display: flex; gap: 10px; }
-    button {
-      width: 100%;
-      padding: 12px;
-      margin-top: 20px;
-      background: #0052cc;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-    }
+    button { width: 100%; padding: 12px; margin-top: 20px; background: #0052cc; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; }
     button:hover { background: #003d99; }
     button:disabled { background: #aaa; cursor: not-allowed; }
     .btn-voltar { background: #6c757d; }
     .btn-voltar:hover { background: #5a6268; }
-    #mensagem {
-      text-align: center;
-      margin-top: 15px;
-      font-weight: bold;
-    }
+    #mensagem { text-align: center; margin-top: 15px; font-weight: bold; }
     .sucesso { color: green; }
     .erro { color: red; }
   </style>
@@ -74,7 +28,6 @@
     <h2>Lançamento de Materiais</h2>
     
     <form id="formSuprimentos">
-      
       <label for="nome">Nome do Colaborador</label>
       <input type="text" id="nome" placeholder="Digite seu nome" required>
 
@@ -139,6 +92,7 @@
 
   <script>
     const URL_API = "https://script.google.com/macros/s/AKfycbze6PFT2208bZcbl77_Qeyjic3VEKZ511x4VymfHbHqFskzV2zhtcT5muoUeMwJs_03/exec";
+    
     const form = document.getElementById("formSuprimentos");
     const btn = document.getElementById("btnEnviar");
     const msg = document.getElementById("mensagem");
@@ -176,6 +130,7 @@
       } catch (err) {
         msg.textContent = "Erro: " + err.message;
         msg.className = "erro";
+        console.error(err);
       } finally {
         btn.disabled = false;
         btn.textContent = "Lançar";
