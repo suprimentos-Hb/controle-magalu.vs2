@@ -7,29 +7,28 @@
   <style>
     * { box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; }
     body { background: #f0f2f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
-    .container { background: white; padding: 30px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 420px; }
+  .container { background: white; padding: 30px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 420px; }
     h2 { text-align: center; color: #0052cc; margin-bottom: 25px; }
     label { font-weight: 600; display: block; margin-top: 15px; margin-bottom: 6px; color: #333; }
     input, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 15px; }
     input:focus, select:focus { outline: none; border-color: #0052cc; }
-    .btn-group { display: flex; gap: 10px; }
-    button { width: 100%; padding: 14px; margin-top: 25px; background: #0052cc; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+    button { width: 100%; padding: 14px; margin-top: 15px; background: #0052cc; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.2s; }
     button:hover { background: #003d99; }
     button:disabled { background: #aaa; cursor: not-allowed; }
-    .btn-voltar { background: #6c757d; }
-    .btn-voltar:hover { background: #5a6268; }
+  .btn-config { background: #6c757d; font-size: 14px; padding: 10px; }
+  .btn-config:hover { background: #5a6268; }
     #mensagem { text-align: center; margin-top: 15px; font-weight: bold; min-height: 22px; }
-    .sucesso { color: #28a745; }
-    iframe { display: none; } /* Esconde o iframe */
+  .sucesso { color: #28a745; }
+  .rodape { display: none; text-align: center; font-size: 12px; color: #555; margin-top: 20px; padding-top: 15px; border-top: 1px solid #eee; line-height: 1.5; }
+    iframe { display: none; }
   </style>
 </head>
 <body>
   <div class="container">
     <h2>Lançamento de Materiais</h2>
     
-    <!-- IMPORTANTE: action = URL do Apps Script | target = iframe_oculto -->
     <form id="formSuprimentos" 
-          action="https://script.google.com/macros/s/AKfycbz_bwZeEsh0AYVMSIjF6KIZjpYJZuOwm7FlutyRbGA7bkpIQ8EeWKKIpJJto3lYEMqm/exec" 
+          action="https://script.google.com/macros/s/AKfycbxdj82V214icCPsoMCBQQRtCm-OWJN2duH2U43PDH9zllhHXSUr2EkEURTKOsWFBKVG/exec" 
           method="POST" 
           target="iframe_oculto">
       
@@ -39,7 +38,7 @@
       <label for="area">Área / Setor</label>
       <input type="text" id="area" name="area" placeholder="Ex: CSC, MTG, Fiscal" required>
       
-      <label for="qtd">Quantidade</label>
+      <label for="qtd">Qtnd.</label>
       <input type="number" id="qtd" name="qtd" min="1" value="1" required>
       
       <label for="produto">Produto</label>
@@ -61,16 +60,18 @@
         <option value="Sulfite ( 50 folhas)">Sulfite ( 50 folhas)</option><option value="Tesoura">Tesoura</option>
       </select>
 
-      <div class="btn-group">
-        <button type="button" class="btn-voltar" onclick="window.history.back()">Voltar</button>
-        <button type="submit" id="btnEnviar">Lançar</button>
-      </div>
+      <button type="submit" id="btnEnviar">Lançar</button>
+      <button type="button" class="btn-config" onclick="mostrarRodape()">Configurações</button>
       <div id="mensagem"></div>
+
+      <div id="rodape" class="rodape">
+        Desenvolvido por Ana Costa - Facilities - Compras Corporativas<br>
+        Conectado diretamente à Planilha de Controle Geral via API.
+      </div>
     </form>
   </div>
 
-  <!-- IFRAME OCULTO PRA RECEBER A RESPOSTA DO GOOGLE -->
-  <iframe name="iframe_oculto" onload="enviado()"></iframe>
+  <iframe name="iframe_oculto"></iframe>
 
   <script>
     let clicou = false;
@@ -82,7 +83,7 @@
       document.getElementById("mensagem").textContent = "";
     });
 
-    function enviado(){ // <-- NOME TEM QUE SER IGUAL AO DO ONLOAD
+    window.enviado = function(){
       if(clicou){
         document.getElementById("mensagem").textContent = "Lançamento registrado com sucesso!";
         document.getElementById("mensagem").className = "sucesso";
@@ -93,81 +94,12 @@
         clicou = false;
       }
     }
-    <!-- IFRAME OCULTO PRA RECEBER A RESPOSTA DO GOOGLE -->
-<iframe name="iframe_oculto" onload="enviado()"></iframe>
-
-<script>
-    let clicou = false;
     
-    document.getElementById("formSuprimentos").addEventListener("submit", () => {
-      clicou = true;
-      document.getElementById("btnEnviar").disabled = true;
-      document.getElementById("btnEnviar").textContent = "Enviando...";
-      document.getElementById("mensagem").textContent = "";
-    });
+    document.getElementsByName("iframe_oculto")[0].onload = window.enviado;
 
-    function enviado(){
-      if(clicou){
-        document.getElementById("mensagem").textContent = "Lançamento registrado com sucesso!";
-        document.getElementById("mensagem").className = "sucesso";
-        document.getElementById("formSuprimentos").reset();
-        document.getElementById("qtd").value = 1;
-        document.getElementById("btnEnviar").disabled = false;
-        document.getElementById("btnEnviar").textContent = "Lançar";
-        clicou = false;
-      }
+    function mostrarRodape(){
+      document.getElementById("rodape").style.display = "block";
     }
-<!-- IFRAME OCULTO PRA RECEBER A RESPOSTA DO GOOGLE -->
-<iframe name="iframe_oculto" onload="enviado()"></iframe>
-
-<script>
-    let clicou = false;
-    
-    document.getElementById("formSuprimentos").addEventListener("submit", () => {
-      clicou = true;
-      document.getElementById("btnEnviar").disabled = true;
-      document.getElementById("btnEnviar").textContent = "Enviando...";
-      document.getElementById("mensagem").textContent = "";
-    });
-
-    function enviado(){
-      if(clicou){
-        document.getElementById("mensagem").textContent = "Lançamento registrado com sucesso!";
-        document.getElementById("mensagem").className = "sucesso";
-        document.getElementById("formSuprimentos").reset();
-        document.getElementById("qtd").value = 1;
-        document.getElementById("btnEnviar").disabled = false;
-        document.getElementById("btnEnviar").textContent = "Lançar";
-        clicou = false;
-      }
-    }
-<!-- IFRAME OCULTO PRA RECEBER A RESPOSTA DO GOOGLE -->
-<iframe name="iframe_oculto" onload="enviado()"></iframe>
-
-<script>
-    let clicou = false;
-    
-    document.getElementById("formSuprimentos").addEventListener("submit", () => {
-      clicou = true;
-      document.getElementById("btnEnviar").disabled = true;
-      document.getElementById("btnEnviar").textContent = "Enviando...";
-      document.getElementById("mensagem").textContent = "";
-    });
-
-    function enviado(){
-      if(clicou){
-        document.getElementById("mensagem").textContent = "Lançamento registrado com sucesso!";
-        document.getElementById("mensagem").className = "sucesso";
-        document.getElementById("formSuprimentos").reset();
-        document.getElementById("qtd").value = 1;
-        document.getElementById("btnEnviar").disabled = false;
-        document.getElementById("btnEnviar").textContent = "Lançar";
-        clicou = false;
-      }
-    }
-</script>
-</body>
-</html>
   </script>
 </body>
 </html>
