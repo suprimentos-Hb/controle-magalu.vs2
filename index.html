@@ -2,24 +2,28 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lançamento</title>
   <style>
     * { box-sizing: border-box; font-family: Arial, sans-serif; }
-    body { background: #f5f5f5; padding: 20px; margin:0 }
-    .container { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); max-width: 400px; margin:auto }
+    body { background: #f5f5f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
+    .container { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
     h2 { text-align: center; color: #0052cc; }
     label { font-weight: bold; display: block; margin-top: 15px; margin-bottom: 5px; }
     input, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px; }
+    .btn-group { display: flex; gap: 10px; }
     button { width: 100%; padding: 12px; margin-top: 20px; background: #0052cc; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
-    #mensagem { text-align: center; margin-top: 15px; font-weight: bold; color: green; }
-    iframe { display:none } /* iframe oculto pra enviar */
+    button:disabled { background: #aaa; }
+    .btn-voltar { background: #6c757d; }
+    #mensagem { text-align: center; margin-top: 15px; font-weight: bold; color: green; min-height: 20px; }
+    iframe { display: none; } /* Esconde o iframe */
   </style>
 </head>
 <body>
   <div class="container">
     <h2>Lançamento de Materiais</h2>
     
-    <!-- O FORM ENVIA PRA UM IFRAME INVISIVEL -->
+    <!-- IMPORTANTE: action aponta pro Apps Script e target pro iframe oculto -->
     <form id="formSuprimentos" 
           action="https://script.google.com/macros/s/AKfycbx7hiE0fBdFI2k5WgCfN5xCCupUstoKlfXYSA-ik3IIWX3IkPAduMrQeu1GczaBamzR/exec" 
           method="POST" 
@@ -37,39 +41,52 @@
       <label for="produto">Produto</label>
       <select id="produto" name="produto" required>
         <option value="">Selecione o material</option>
-        <option value="Fita crepe">Fita crepe</option>
-        <option value="Caneta">Caneta</option>
-        <option value="Sulfite ( 50 folhas)">Sulfite ( 50 folhas)</option>
-        <option value="Caixa De arquivo">Caixa De arquivo</option>
-        <!-- Cola o resto dos produtos aqui -->
+        <option value="Apontador">Apontador</option><option value="Barbante">Barbante</option><option value="Bexiga">Bexiga</option>
+        <option value="Caderno grande">Caderno grande</option><option value="Caderno Médio">Caderno Médio</option><option value="Caderno pequeno">Caderno pequeno</option>
+        <option value="Caixa De arquivo">Caixa De arquivo</option><option value="Caneta">Caneta</option><option value="Cartolina">Cartolina</option>
+        <option value="Clipes">Clipes</option><option value="Cola">Cola</option><option value="Cola Bastão">Cola Bastão</option>
+        <option value="Copo Azul">Copo Azul</option><option value="Copo Branco">Copo Branco</option><option value="Elástico">Elástico</option>
+        <option value="Etiqueta">Etiqueta</option><option value="Fita crepe">Fita crepe</option><option value="Fita de embalagens">Fita de embalagens</option>
+        <option value="Fita Embalagem">Fita Embalagem</option><option value="Fita Zebrada">Fita Zebrada</option><option value="Flipchart">Flipchart</option>
+        <option value="Grampeador">Grampeador</option><option value="Grampos">Grampos</option><option value="Guardanapo">Guardanapo</option>
+        <option value="Lápis">Lápis</option><option value="Linha De Pesca">Linha De Pesca</option><option value="Marca texto">Marca texto</option>
+        <option value="Marca Texto">Marca Texto</option><option value="Papel Pardo">Papel Pardo</option><option value="Pasta De Documentos">Pasta De Documentos</option>
+        <option value="Pilha AA">Pilha AA</option><option value="Pilha AAA">Pilha AAA</option><option value="Pincel atômico">Pincel atômico</option>
+        <option value="Pincel permanente">Pincel permanente</option><option value="Pincel Quadro branco">Pincel Quadro branco</option>
+        <option value="Post It">Post It</option><option value="Régua">Régua</option><option value="Super bonder">Super bonder</option>
+        <option value="Sulfite ( 50 folhas)">Sulfite ( 50 folhas)</option><option value="Tesoura">Tesoura</option>
       </select>
 
-      <button type="submit" id="btnEnviar">Lançar</button>
+      <div class="btn-group">
+        <button type="button" class="btn-voltar" onclick="window.history.back()">Voltar</button>
+        <button type="submit" id="btnEnviar">Lançar</button>
+      </div>
       <div id="mensagem"></div>
     </form>
   </div>
 
-  <!-- IFRAME OCULTO QUE RECEBE A RESPOSTA -->
-  <iframe name="iframe_oculto" onload="mostrarSucesso()"></iframe>
+  <!-- IFRAME OCULTO PRA RECEBER A RESPOSTA DO GOOGLE -->
+  <iframe name="iframe_oculto" onload="enviado()"></iframe>
 
   <script>
-    let enviou = false;
+    let clicou = false;
     document.getElementById("formSuprimentos").addEventListener("submit", () => {
-      enviou = true;
+      clicou = true;
       document.getElementById("btnEnviar").disabled = true;
       document.getElementById("btnEnviar").textContent = "Enviando...";
     });
 
-    function mostrarSucesso(){
-      if(enviou){
+    function enviado(){
+      if(clicou){
         document.getElementById("mensagem").textContent = "Lançamento registrado com sucesso!";
         document.getElementById("formSuprimentos").reset();
         document.getElementById("qtd").value = 1;
         document.getElementById("btnEnviar").disabled = false;
         document.getElementById("btnEnviar").textContent = "Lançar";
-        enviou = false;
+        clicou = false;
       }
     }
   </script>
 </body>
 </html>
+  
