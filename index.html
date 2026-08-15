@@ -1,31 +1,30 @@
-
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lançamento - Materiais de Escritório</title>
+  <title>Lançamento</title>
   <style>
     * { box-sizing: border-box; font-family: Arial, sans-serif; }
     body { background: #f5f5f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
     .container { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
-    h2 { text-align: center; color: #0052cc; margin-bottom: 20px; }
+    h2 { text-align: center; color: #0052cc; }
     label { font-weight: bold; display: block; margin-top: 15px; margin-bottom: 5px; }
-    input, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; }
+    input, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px; }
     .btn-group { display: flex; gap: 10px; }
-    button { width: 100%; padding: 12px; margin-top: 20px; background: #0052cc; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; }
+    button { width: 100%; padding: 12px; margin-top: 20px; background: #0052cc; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
     button:disabled { background: #aaa; }
     .btn-voltar { background: #6c757d; }
     #mensagem { text-align: center; margin-top: 15px; font-weight: bold; }
     .sucesso { color: green; }
+    .erro { color: red; }
   </style>
 </head>
 <body>
   <div class="container">
     <h2>Lançamento de Materiais</h2>
     
-    <!-- TIRA O IFRAME E ENVIA NORMAL -->
-    <form id="formSuprimentos" method="POST" action="https://script.google.com/macros/s/AKfycbwbtU4iKg66UtJCuEoq43CnrDP3ja16H-UBX7s7aQomJ_Rc5-ltUNPpNLu-m7p62cWu/exec">
+    <form id="formSuprimentos">
       <label>Nome do Colaborador</label>
       <input type="text" name="nome" required>
       <label>Área / Setor</label>
@@ -55,20 +54,41 @@
         <button type="button" class="btn-voltar" onclick="window.location.href='configuracoes.html'">Voltar</button>
         <button type="submit" id="btnEnviar">Lançar</button>
       </div>
-      <div id="mensagem" class="sucesso"></div>
+      <div id="mensagem"></div>
     </form>
   </div>
 
   <script>
+    const URL = "https://script.google.com/macros/s/AKfycbwbtU4iKg66UtJCuEoq43CnrDP3ja16H-UBX7s7aQomJ_Rc5-ltUNPpNLu-m7p62cWu/exec";
     const form = document.getElementById("formSuprimentos");
     const btn = document.getElementById("btnEnviar");
     const msg = document.getElementById("mensagem");
 
-    form.addEventListener("submit", function() {
+    form.addEventListener("submit", e => {
+      e.preventDefault(); // TRAVA A PÁGINA DE TROCAR
       btn.disabled = true;
       btn.textContent = "Enviando...";
-      msg.textContent = "Lançamento registrado com sucesso!";
-      // Ele vai sair da página e voltar. Os dados já foram enviados.
+      msg.textContent = "";
+
+      fetch(URL, {
+        method: "POST",
+        mode: "no-cors", // ESSA É A CHAVE PRA NÃO DAR CORS
+        body: new FormData(form)
+      })
+      .then(() => {
+        msg.textContent = "Lançamento registrado com sucesso!";
+        msg.className = "sucesso";
+        form.reset();
+        document.querySelector("input[name=qtd]").value = 1;
+      })
+      .catch(() => {
+        msg.textContent = "Erro ao enviar. Tente novamente.";
+        msg.className = "erro";
+      })
+      .finally(() => {
+        btn.disabled = false;
+        btn.textContent = "Lançar";
+      });
     });
   </script>
 </body>
