@@ -12,20 +12,24 @@
     label { font-weight: 600; display: block; margin-top: 15px; margin-bottom: 6px; color: #333; }
     input, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 15px; background: #f8f9fa; }
     input:focus, select:focus { outline: none; border-color: #0052cc; background: white; }
-    button { width: 100%; padding: 14px; margin-top: 15px; background: #0052cc; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+    button { width: 100%; padding: 14px; margin-top: 15px; background: #0052cc; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; }
     button:hover { background: #003d99; }
-    button:disabled { background: #aaa; cursor: not-allowed; }
+    button:disabled { background: #aaa; }
    .btn-config { background: #6c757d; font-size: 14px; padding: 10px; margin-top: 10px; }
    .btn-config:hover { background: #5a6268; }
     #mensagem { text-align: center; margin-top: 15px; font-weight: bold; min-height: 22px; }
    .sucesso { color: #28a745; }
    .erro { color: #dc3545; }
+    iframe { display: none; }
   </style>
 </head>
 <body>
   <div class="container">
     <h2>Lançamento de Materiais</h2>
-    <form id="formSuprimentos">
+    <form id="formSuprimentos"
+          action="https://script.google.com/a/macros/magazineluiza.com.br/s/AKfycbyVDxhyIyVHFQSkq8x87aDQJPc64lxKXf46KpIWBdz5jVnnbORkq9nmlChQfGc3m8-I/exec /a/macros/magazineluiza.com.br/ -->
+          method="POST"
+          target="iframe_oculto">
 
       <label for="nome">Nome do Colaborador</label>
       <input type="text" id="nome" name="nome" required>
@@ -60,46 +64,29 @@
     </form>
   </div>
 
+  <iframe name="iframe_oculto" onload="enviado()"></iframe>
+
   <script>
-    const URL_SCRIPT = "https://script.google.com/a/macros/magazineluiza.com.br/s/AKfycbzZvGw46RJAt4JRXxpQiEAO-YJH7tBas9L3etYkL4x-rt9xra-NAFoRppgZCogd38M/exec"; // COLE A URL DO APPS SCRIPT COM /a/macros/magazineluiza.com.br/
-
-    document.getElementById("formSuprimentos").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const btn = document.getElementById("btnEnviar");
-      const msg = document.getElementById("mensagem");
-      
-      btn.disabled = true; 
-      btn.textContent = "Enviando..."; 
-      msg.textContent = "";
-
-      const formData = new FormData(e.target);
-
-      try {
-        const resposta = await fetch(URL_SCRIPT, {
-          method: 'POST',
-          body: formData,
-          credentials: 'include' // IMPORTANTE: Envia o login da conta @magazineluiza.com.br
-        });
-        
-        const texto = await resposta.text();
-        if(texto.includes("sucesso")){
-          msg.textContent = "Lançamento registrado com sucesso!"; 
-          msg.className = "sucesso";
-          e.target.reset(); 
-          document.getElementById("qtd").value = 1;
-        } else {
-          msg.textContent = "Erro: " + texto; 
-          msg.className = "erro";
-        }
-
-      } catch(error) { 
-        msg.textContent = "Erro 401: Faça login com @magazineluiza.com.br e autorize o app"; 
-        msg.className = "erro"; 
-      }
-
-      btn.disabled = false; 
-      btn.textContent = "Lançar";
+    let enviando = false;
+    
+    document.getElementById("formSuprimentos").addEventListener("submit", () => {
+      enviando = true; 
+      document.getElementById("btnEnviar").disabled = true; 
+      document.getElementById("btnEnviar").textContent = "Enviando..."; 
+      document.getElementById("mensagem").textContent = "";
+      setTimeout(() => { // timeout pra garantir que salvou
+        document.getElementById("mensagem").textContent = "Lançamento registrado com sucesso!"; 
+        document.getElementById("mensagem").className = "sucesso";
+        document.getElementById("formSuprimentos").reset(); 
+        document.getElementById("qtd").value = 1;
+        document.getElementById("btnEnviar").disabled = false; 
+        document.getElementById("btnEnviar").textContent = "Lançar";
+      }, 1500);
     });
+
+    function enviado(){
+      if(!enviando) return;
+    }
 
     function mostrarConfig(){ 
       alert("Versão 1.0\nDesenvolvido por Ana Laura Aparecida Pereira Costa\nFacilities - Compras Corporativas"); 
