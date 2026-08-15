@@ -138,14 +138,13 @@
   </div>
 
   <script>
-    const URL_API = "https://script.google.com/macros/s/AKfycbzORE0jeDOiwxhuBvkgKWS3MXw4UuiABYgUa_fiT3mQ_2Hj4lQ_R6Xv687tFP3QLOM/exec";
+    const URL_API = "https://script.google.com/macros/s/AKfycbze6PFT2208bZcbl77_Qeyjic3VEKZ511x4VymfHbHqFskzV2zhtcT5muoUeMwJs_03/exec";
     const form = document.getElementById("formSuprimentos");
     const btn = document.getElementById("btnEnviar");
     const msg = document.getElementById("mensagem");
 
     form.addEventListener("submit", async function(e) {
       e.preventDefault();
-      
       btn.disabled = true;
       btn.textContent = "Enviando...";
       msg.textContent = "";
@@ -175,9 +174,8 @@
           throw new Error(resultado.msg);
         }
       } catch (err) {
-        msg.textContent = "Erro ao enviar: " + err.message;
+        msg.textContent = "Erro: " + err.message;
         msg.className = "erro";
-        console.error(err);
       } finally {
         btn.disabled = false;
         btn.textContent = "Lançar";
@@ -187,4 +185,3 @@
 
 </body>
 </html>
- 
