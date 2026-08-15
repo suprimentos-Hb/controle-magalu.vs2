@@ -11,7 +11,6 @@
     h2 { text-align: center; color: #0052cc; margin-bottom: 25px; }
     label { font-weight: 600; display: block; margin-top: 15px; margin-bottom: 6px; color: #333; }
     input, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 15px; background: #f8f9fa; }
-    input:focus, select:focus { outline: none; border-color: #0052cc; background: white; }
     button { width: 100%; padding: 14px; margin-top: 15px; background: #0052cc; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; }
     button:hover { background: #003d99; }
     button:disabled { background: #aaa; }
@@ -27,7 +26,7 @@
   <div class="container">
     <h2>Lançamento de Materiais</h2>
     <form id="formSuprimentos"
-          action="https://script.google.com/a/macros/magazineluiza.com.br/s/AKfycbyVDxhyIyVHFQSkq8x87aDQJPc64lxKXf46KpIWBdz5jVnnbORkq9nmlChQfGc3m8-I/exec /a/macros/magazineluiza.com.br/ -->
+          action="https://script.google.com/a/macros/magazineluiza.com.br/s/AKfycbzF7g1M6Y2xRVL9FBYPGkmMM-snsyzHpeKpSxb8LCAq0d6v6yxLbECT_TUr-uDQyE89/exec" <!-- IMPORTANTE: tem que terminar com /exec -->
           method="POST"
           target="iframe_oculto">
 
@@ -64,29 +63,28 @@
     </form>
   </div>
 
-  <iframe name="iframe_oculto" onload="enviado()"></iframe>
+  <iframe name="iframe_oculto"></iframe>
 
   <script>
-    let enviando = false;
-    
-    document.getElementById("formSuprimentos").addEventListener("submit", () => {
-      enviando = true; 
-      document.getElementById("btnEnviar").disabled = true; 
-      document.getElementById("btnEnviar").textContent = "Enviando..."; 
-      document.getElementById("mensagem").textContent = "";
-      setTimeout(() => { // timeout pra garantir que salvou
-        document.getElementById("mensagem").textContent = "Lançamento registrado com sucesso!"; 
-        document.getElementById("mensagem").className = "sucesso";
-        document.getElementById("formSuprimentos").reset(); 
-        document.getElementById("qtd").value = 1;
-        document.getElementById("btnEnviar").disabled = false; 
-        document.getElementById("btnEnviar").textContent = "Lançar";
-      }, 1500);
-    });
+    const form = document.getElementById("formSuprimentos");
+    const btn = document.getElementById("btnEnviar");
+    const msg = document.getElementById("mensagem");
 
-    function enviado(){
-      if(!enviando) return;
-    }
+    form.addEventListener("submit", () => {
+      btn.disabled = true; 
+      btn.textContent = "Enviando..."; 
+      msg.textContent = "";
+      
+      // Como não conseguimos ler o iframe por causa do Google, assumimos sucesso após 2s
+      setTimeout(() => {
+        msg.textContent = "Lançamento registrado com sucesso!"; 
+        msg.className = "sucesso";
+        form.reset(); 
+        document.getElementById("qtd").value = 1;
+        btn.disabled = false; 
+        btn.textContent = "Lançar";
+      }, 2000);
+    });
 
     function mostrarConfig(){ 
       alert("Versão 1.0\nDesenvolvido por Ana Laura Aparecida Pereira Costa\nFacilities - Compras Corporativas"); 
