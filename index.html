@@ -9,30 +9,32 @@
     body { background: #f5f5f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
     .container { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
     h2 { text-align: center; color: #0052cc; margin-bottom: 20px; }
-    label { font-weight: bold; display: block; margin-top: 15px; margin-bottom: 5px; color: #333; }
+    label { font-weight: bold; display: block; margin-top: 15px; margin-bottom: 5px; }
     input, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; }
     .btn-group { display: flex; gap: 10px; }
     button { width: 100%; padding: 12px; margin-top: 20px; background: #0052cc; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; }
-    button:hover { background: #003d99; }
     button:disabled { background: #aaa; }
     .btn-voltar { background: #6c757d; }
     #mensagem { text-align: center; margin-top: 15px; font-weight: bold; }
     .sucesso { color: green; }
     .erro { color: red; }
+    iframe { display: none; } /* iframe escondido */
   </style>
 </head>
 <body>
   <div class="container">
     <h2>Lançamento de Materiais</h2>
-    <form id="formSuprimentos">
+    
+    <!-- FORM ENVIA DIRETO PRA URL DO SCRIPT -->
+    <form id="formSuprimentos" target="hidden_iframe" method="POST" action="https://script.google.com/macros/s/AKfycbze6PFT2208bZcbl77_Qeyjic3VEKZ511x4VymfHbHqFskzV2zhtcT5muoUeMwJs_03/exec">
       <label>Nome do Colaborador</label>
-      <input type="text" id="nome" required>
+      <input type="text" name="nome" required>
       <label>Área / Setor</label>
-      <input type="text" id="area" required>
+      <input type="text" name="area" required>
       <label>Quantidade</label>
-      <input type="number" id="qtd" min="1" value="1" required>
+      <input type="number" name="qtd" min="1" value="1" required>
       <label>Produto</label>
-      <select id="produto" required>
+      <select name="produto" required>
         <option value="">Selecione o material</option>
         <option value="Apontador">Apontador</option><option value="Barbante">Barbante</option><option value="Bexiga">Bexiga</option>
         <option value="Caderno grande">Caderno grande</option><option value="Caderno Médio">Caderno Médio</option><option value="Caderno pequeno">Caderno pequeno</option>
@@ -58,40 +60,33 @@
     </form>
   </div>
 
+  <!-- IFRAME ESCONDIDO PRA RECEBER A RESPOSTA -->
+  <iframe name="hidden_iframe" id="hidden_iframe"></iframe>
+
   <script>
-    const URL_API = "https://script.google.com/macros/s/AKfycbze6PFT2208bZcbl77_Qeyjic3VEKZ511x4VymfHbHqFskzV2zhtcT5muoUeMwJs_03/execc";
-    
-    document.getElementById("formSuprimentos").addEventListener("submit", async function(e) {
-      e.preventDefault();
-      const btn = document.getElementById("btnEnviar");
-      const msg = document.getElementById("mensagem");
+    const form = document.getElementById("formSuprimentos");
+    const btn = document.getElementById("btnEnviar");
+    const msg = document.getElementById("mensagem");
+
+    form.addEventListener("submit", function() {
       btn.disabled = true;
       btn.textContent = "Enviando...";
       msg.textContent = "";
+    });
 
-      const nome = encodeURIComponent(document.getElementById("nome").value);
-      const area = encodeURIComponent(document.getElementById("area").value);
-      const qtd = encodeURIComponent(document.getElementById("qtd").value);
-      const produto = encodeURIComponent(document.getElementById("produto").value);
-
-      const url = `${URL_API}?nome=${nome}&area=${area}&qtd=${qtd}&produto=${produto}`;
-
-      try {
-        await fetch(url, { method: "GET", mode: "no-cors" }); // MODO NO-CORS
-        
-        // Como é no-cors não conseguimos ler a resposta, então assumimos que deu certo
+    // OUVE A RESPOSTA DO SCRIPT
+    window.addEventListener("message", function(e) {
+      if(e.data === "sucesso"){
         msg.textContent = "Lançamento registrado com sucesso!";
         msg.className = "sucesso";
-        e.target.reset();
-        document.getElementById("qtd").value = 1;
-        
-      } catch (err) {
-        msg.textContent = "Erro ao enviar";
+        form.reset();
+        document.querySelector("input[name=qtd]").value = 1;
+      } else {
+        msg.textContent = "Erro ao registrar";
         msg.className = "erro";
-      } finally {
-        btn.disabled = false;
-        btn.textContent = "Lançar";
       }
+      btn.disabled = false;
+      btn.textContent = "Lançar";
     });
   </script>
 </body>
