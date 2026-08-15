@@ -11,63 +11,42 @@
     h2 { text-align: center; color: #0052cc; margin-bottom: 25px; }
     label { font-weight: 600; display: block; margin-top: 15px; margin-bottom: 6px; color: #333; }
     input, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 15px; }
-    input:focus, select:focus { outline: none; border-color: #0052cc; }
-    button { width: 100%; padding: 14px; margin-top: 15px; background: #0052cc; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.2s; }
-    button:hover { background: #003d99; }
-    button:disabled { background: #aaa; cursor: not-allowed; }
+    button { width: 100%; padding: 14px; margin-top: 15px; background: #0052cc; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; }
+    button:disabled { background: #aaa; }
   .btn-config { background: #6c757d; font-size: 14px; padding: 10px; }
-  .btn-config:hover { background: #5a6268; }
     #mensagem { text-align: center; margin-top: 15px; font-weight: bold; min-height: 22px; }
   .sucesso { color: #28a745; }
-  .rodape { display: none; text-align: center; font-size: 12px; color: #555; margin-top: 20px; padding-top: 15px; border-top: 1px solid #eee; line-height: 1.5; }
+  .erro { color: #dc3545; }
     iframe { display: none; }
   </style>
 </head>
 <body>
   <div class="container">
     <h2>Lançamento de Materiais</h2>
-    
-    <form id="formSuprimentos" 
-          action="https://script.google.com/macros/s/AKfycbxdj82V214icCPsoMCBQQRtCm-OWJN2duH2U43PDH9zllhHXSUr2EkEURTKOsWFBKVG/exec" 
-          method="POST" 
+
+    <form id="formSuprimentos"
+          action="https://script.google.com/macros/s/AKfycbxdj82V214icCPsoMCBQQRtCm-OWJN2duH2U43PDH9zllhHXSUr2EkEURTKOsWFBKVG/exec"
+          method="POST"
           target="iframe_oculto">
-      
+
       <label for="nome">Nome do Colaborador</label>
       <input type="text" id="nome" name="nome" required>
-      
+
       <label for="area">Área / Setor</label>
-      <input type="text" id="area" name="area" placeholder="Ex: CSC, MTG, Fiscal" required>
-      
+      <input type="text" id="area" name="area" required>
+
       <label for="qtd">Qtnd.</label>
       <input type="number" id="qtd" name="qtd" min="1" value="1" required>
-      
+
       <label for="produto">Produto</label>
       <select id="produto" name="produto" required>
         <option value="">Selecione o material</option>
-        <option value="Apontador">Apontador</option><option value="Barbante">Barbante</option><option value="Bexiga">Bexiga</option>
-        <option value="Caderno grande">Caderno grande</option><option value="Caderno Médio">Caderno Médio</option><option value="Caderno pequeno">Caderno pequeno</option>
-        <option value="Caixa De arquivo">Caixa De arquivo</option><option value="Caneta">Caneta</option><option value="Cartolina">Cartolina</option>
-        <option value="Clipes">Clipes</option><option value="Cola">Cola</option><option value="Cola Bastão">Cola Bastão</option>
-        <option value="Copo Azul">Copo Azul</option><option value="Copo Branco">Copo Branco</option><option value="Elástico">Elástico</option>
-        <option value="Etiqueta">Etiqueta</option><option value="Fita crepe">Fita crepe</option><option value="Fita de embalagens">Fita de embalagens</option>
-        <option value="Fita Embalagem">Fita Embalagem</option><option value="Fita Zebrada">Fita Zebrada</option><option value="Flipchart">Flipchart</option>
-        <option value="Grampeador">Grampeador</option><option value="Grampos">Grampos</option><option value="Guardanapo">Guardanapo</option>
-        <option value="Lápis">Lápis</option><option value="Linha De Pesca">Linha De Pesca</option><option value="Marca texto">Marca texto</option>
-        <option value="Marca Texto">Marca Texto</option><option value="Papel Pardo">Papel Pardo</option><option value="Pasta De Documentos">Pasta De Documentos</option>
-        <option value="Pilha AA">Pilha AA</option><option value="Pilha AAA">Pilha AAA</option><option value="Pincel atômico">Pincel atômico</option>
-        <option value="Pincel permanente">Pincel permanente</option><option value="Pincel Quadro branco">Pincel Quadro branco</option>
-        <option value="Post It">Post It</option><option value="Régua">Régua</option><option value="Super bonder">Super bonder</option>
-        <option value="Sulfite ( 50 folhas)">Sulfite ( 50 folhas)</option><option value="Tesoura">Tesoura</option>
+        <option value="Caneta">Caneta</option><option value="Lápis">Lápis</option><option value="Tesoura">Tesoura</option>
       </select>
 
       <button type="submit" id="btnEnviar">Lançar</button>
-      <button type="button" class="btn-config" onclick="mostrarRodape()">Configurações</button>
+      <button type="button" class="btn-config">Configurações</button>
       <div id="mensagem"></div>
-
-      <div id="rodape" class="rodape">
-        Desenvolvido por Ana Costa - Facilities - Compras Corporativas<br>
-        Conectado diretamente à Planilha de Controle Geral via API.
-      </div>
     </form>
   </div>
 
@@ -75,7 +54,7 @@
 
   <script>
     let clicou = false;
-    
+
     document.getElementById("formSuprimentos").addEventListener("submit", () => {
       clicou = true;
       document.getElementById("btnEnviar").disabled = true;
@@ -85,21 +64,25 @@
 
     window.enviado = function(){
       if(clicou){
-        document.getElementById("mensagem").textContent = "Lançamento registrado com sucesso!";
-        document.getElementById("mensagem").className = "sucesso";
-        document.getElementById("formSuprimentos").reset();
-        document.getElementById("qtd").value = 1;
+        const iframe = document.getElementsByName("iframe_oculto")[0];
+        const resposta = iframe.contentDocument.body.innerText;
+
+        if(resposta.includes("sucesso")){
+          document.getElementById("mensagem").textContent = "Lançamento registrado com sucesso!";
+          document.getElementById("mensagem").className = "sucesso";
+          document.getElementById("formSuprimentos").reset();
+          document.getElementById("qtd").value = 1;
+        } else {
+          document.getElementById("mensagem").textContent = "Erro ao lançar: " + resposta;
+          document.getElementById("mensagem").className = "erro";
+        }
         document.getElementById("btnEnviar").disabled = false;
         document.getElementById("btnEnviar").textContent = "Lançar";
         clicou = false;
       }
     }
-    
-    document.getElementsByName("iframe_oculto")[0].onload = window.enviado;
 
-    function mostrarRodape(){
-      document.getElementById("rodape").style.display = "block";
-    }
+    document.getElementsByName("iframe_oculto")[0].onload = window.enviado;
   </script>
 </body>
 </html>
