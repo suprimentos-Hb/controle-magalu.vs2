@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lançamento de Materiais</title>
+  <title>Lançamento de Materiais - Magalu</title>
   <style>
     * { box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; }
     body { background: #f0f2f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
@@ -12,7 +12,7 @@
     label { font-weight: 600; display: block; margin-top: 15px; margin-bottom: 6px; color: #333; }
     input, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 15px; background: #f8f9fa; }
     input:focus, select:focus { outline: none; border-color: #0052cc; background: white; }
-    button { width: 100%; padding: 14px; margin-top: 15px; background: #0052cc; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; }
+    button { width: 100%; padding: 14px; margin-top: 15px; background: #0052cc; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.2s; }
     button:hover { background: #003d99; }
     button:disabled { background: #aaa; cursor: not-allowed; }
    .btn-config { background: #6c757d; font-size: 14px; padding: 10px; margin-top: 10px; }
@@ -61,7 +61,7 @@
   </div>
 
   <script>
-    const URL_SCRIPT = "https://script.google.com/a/macros/magazineluiza.com.br/s/AKfycbwvRcZO2QiGKE7Bsi6UP133SRHhh4QrNIR7EDS02YPeSONjZiqpD-745iXBx5izcb-w/exec"; // TROCA AQUI
+    const URL_SCRIPT = "https://script.google.com/a/macros/magazineluiza.com.br/s/AKfycbzZvGw46RJAt4JRXxpQiEAO-YJH7tBas9L3etYkL4x-rt9xra-NAFoRppgZCogd38M/exec"; // COLE A URL DO APPS SCRIPT COM /a/macros/magazineluiza.com.br/
 
     document.getElementById("formSuprimentos").addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -78,17 +78,22 @@
         const resposta = await fetch(URL_SCRIPT, {
           method: 'POST',
           body: formData,
-          mode: 'no-cors' // Importante para conta corporativa
+          credentials: 'include' // IMPORTANTE: Envia o login da conta @magazineluiza.com.br
         });
         
-        // Como usamos no-cors, não conseguimos ler a resposta. Assumimos que deu certo
-        msg.textContent = "Lançamento registrado com sucesso!"; 
-        msg.className = "sucesso";
-        e.target.reset(); 
-        document.getElementById("qtd").value = 1;
+        const texto = await resposta.text();
+        if(texto.includes("sucesso")){
+          msg.textContent = "Lançamento registrado com sucesso!"; 
+          msg.className = "sucesso";
+          e.target.reset(); 
+          document.getElementById("qtd").value = 1;
+        } else {
+          msg.textContent = "Erro: " + texto; 
+          msg.className = "erro";
+        }
 
       } catch(error) { 
-        msg.textContent = "Erro ao enviar. Verifique sua conexão."; 
+        msg.textContent = "Erro 401: Faça login com @magazineluiza.com.br e autorize o app"; 
         msg.className = "erro"; 
       }
 
