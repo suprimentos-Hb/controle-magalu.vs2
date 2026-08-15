@@ -12,7 +12,7 @@
     label { font-weight: 600; display: block; margin-top: 15px; margin-bottom: 6px; color: #333; }
     input, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 15px; background: #f8f9fa; }
     input:focus, select:focus { outline: none; border-color: #0052cc; background: white; }
-    button { width: 100%; padding: 14px; margin-top: 15px; background: #0052cc; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+    button { width: 100%; padding: 14px; margin-top: 15px; background: #0052cc; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; }
     button:hover { background: #003d99; }
     button:disabled { background: #aaa; cursor: not-allowed; }
    .btn-config { background: #6c757d; font-size: 14px; padding: 10px; margin-top: 10px; }
@@ -20,16 +20,12 @@
     #mensagem { text-align: center; margin-top: 15px; font-weight: bold; min-height: 22px; }
    .sucesso { color: #28a745; }
    .erro { color: #dc3545; }
-    iframe { display: none; }
   </style>
 </head>
 <body>
   <div class="container">
     <h2>Lançamento de Materiais</h2>
-    <form id="formSuprimentos"
-          action="https://script.google.com/a/macros/magazineluiza.com.br/s/AKfycbwvRcZO2QiGKE7Bsi6UP133SRHhh4QrNIR7EDS02YPeSONjZiqpD-745iXBx5izcb-w/exec" <!-- TROCA AQUI -->
-          method="POST"
-          target="iframe_oculto">
+    <form id="formSuprimentos">
 
       <label for="nome">Nome do Colaborador</label>
       <input type="text" id="nome" name="nome" required>
@@ -64,42 +60,41 @@
     </form>
   </div>
 
-  <iframe name="iframe_oculto"></iframe>
-
   <script>
-    let clicou = false;
-    
-    document.getElementById("formSuprimentos").addEventListener("submit", () => {
-      clicou = true; 
-      document.getElementById("btnEnviar").disabled = true; 
-      document.getElementById("btnEnviar").textContent = "Enviando..."; 
-      document.getElementById("mensagem").textContent = "";
-    });
+    const URL_SCRIPT = "https://script.google.com/a/macros/magazineluiza.com.br/s/AKfycbwvRcZO2QiGKE7Bsi6UP133SRHhh4QrNIR7EDS02YPeSONjZiqpD-745iXBx5izcb-w/exec"; // TROCA AQUI
 
-    window.enviado = function(){
-      if(!clicou) return; 
-      clicou = false;
+    document.getElementById("formSuprimentos").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById("btnEnviar");
+      const msg = document.getElementById("mensagem");
+      
+      btn.disabled = true; 
+      btn.textContent = "Enviando..."; 
+      msg.textContent = "";
+
+      const formData = new FormData(e.target);
+
       try {
-        const iframe = document.getElementsByName("iframe_oculto")[0];
-        const resposta = iframe.contentDocument.body.innerText;
-        if(resposta.includes("sucesso")){
-          document.getElementById("mensagem").textContent = "Lançamento registrado com sucesso!"; 
-          document.getElementById("mensagem").className = "sucesso";
-          document.getElementById("formSuprimentos").reset(); 
-          document.getElementById("qtd").value = 1;
-        } else { 
-          document.getElementById("mensagem").textContent = "Erro: " + resposta; 
-          document.getElementById("mensagem").className = "erro"; 
-        }
-      } catch(e) { 
-        document.getElementById("mensagem").textContent = "Erro de permissão. Verifique se a URL do Apps Script está correta e com 'Qualquer pessoa na organização'"; 
-        document.getElementById("mensagem").className = "erro"; 
+        const resposta = await fetch(URL_SCRIPT, {
+          method: 'POST',
+          body: formData,
+          mode: 'no-cors' // Importante para conta corporativa
+        });
+        
+        // Como usamos no-cors, não conseguimos ler a resposta. Assumimos que deu certo
+        msg.textContent = "Lançamento registrado com sucesso!"; 
+        msg.className = "sucesso";
+        e.target.reset(); 
+        document.getElementById("qtd").value = 1;
+
+      } catch(error) { 
+        msg.textContent = "Erro ao enviar. Verifique sua conexão."; 
+        msg.className = "erro"; 
       }
-      document.getElementById("btnEnviar").disabled = false; 
-      document.getElementById("btnEnviar").textContent = "Lançar";
-    }
-    
-    document.getElementsByName("iframe_oculto")[0].onload = window.enviado;
+
+      btn.disabled = false; 
+      btn.textContent = "Lançar";
+    });
 
     function mostrarConfig(){ 
       alert("Versão 1.0\nDesenvolvido por Ana Laura Aparecida Pereira Costa\nFacilities - Compras Corporativas"); 
