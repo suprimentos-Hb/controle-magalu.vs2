@@ -23,19 +23,17 @@
   </style>
 </head>
 <body>
-
   <div class="container">
     <h2>Lançamento de Materiais</h2>
-    
     <form id="formSuprimentos">
       <label for="nome">Nome do Colaborador</label>
-      <input type="text" id="nome" placeholder="Digite seu nome" required>
+      <input type="text" id="nome" required>
 
       <label for="area">Área / Setor</label>
-      <input type="text" id="area" placeholder="Ex: CSC, MTG, Fiscal..." required>
+      <input type="text" id="area" required>
 
       <label for="qtd">Quantidade</label>
-      <input type="number" id="qtd" placeholder="Ex: 1" min="1" value="1" required>
+      <input type="number" id="qtd" min="1" value="1" required>
 
       <label for="produto">Produto</label>
       <select id="produto" required>
@@ -93,12 +91,10 @@
   <script>
     const URL_API = "https://script.google.com/macros/s/AKfycbze6PFT2208bZcbl77_Qeyjic3VEKZ511x4VymfHbHqFskzV2zhtcT5muoUeMwJs_03/exec";
     
-    const form = document.getElementById("formSuprimentos");
-    const btn = document.getElementById("btnEnviar");
-    const msg = document.getElementById("mensagem");
-
-    form.addEventListener("submit", async function(e) {
+    document.getElementById("formSuprimentos").addEventListener("submit", async function(e) {
       e.preventDefault();
+      const btn = document.getElementById("btnEnviar");
+      const msg = document.getElementById("mensagem");
       btn.disabled = true;
       btn.textContent = "Enviando...";
       msg.textContent = "";
@@ -116,13 +112,12 @@
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(dados)
         });
-        
         const resultado = await response.json();
         
         if(resultado.status === "sucesso"){
           msg.textContent = "Lançamento registrado com sucesso!";
           msg.className = "sucesso";
-          form.reset();
+          e.target.reset();
           document.getElementById("qtd").value = 1;
         } else {
           throw new Error(resultado.msg);
@@ -130,13 +125,11 @@
       } catch (err) {
         msg.textContent = "Erro: " + err.message;
         msg.className = "erro";
-        console.error(err);
       } finally {
         btn.disabled = false;
         btn.textContent = "Lançar";
       }
     });
   </script>
-
 </body>
 </html>
