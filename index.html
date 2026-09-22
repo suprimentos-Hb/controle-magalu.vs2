@@ -1,94 +1,270 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lançamento de Materiais - Magalu</title>
+
   <style>
-    * { box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; }
-    body { background: #f0f2f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
-   .container { background: white; padding: 30px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 420px; }
-    h2 { text-align: center; color: #0052cc; margin-bottom: 25px; }
-    label { font-weight: 600; display: block; margin-top: 15px; margin-bottom: 6px; color: #333; }
-    input, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 15px; background: #f8f9fa; }
-    button { width: 100%; padding: 14px; margin-top: 15px; background: #0052cc; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; }
-    button:hover { background: #003d99; }
-    button:disabled { background: #aaa; }
-   .btn-config { background: #6c757d; font-size: 14px; padding: 10px; margin-top: 10px; }
-   .btn-config:hover { background: #5a6268; }
-    #mensagem { text-align: center; margin-top: 15px; font-weight: bold; min-height: 22px; }
-   .sucesso { color: #28a745; }
-   .erro { color: #dc3545; }
-    iframe { display: none; }
+    * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Arial, sans-serif;
+    }
+
+    body {
+      background: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 420px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #0052cc;
+      margin-bottom: 25px;
+    }
+
+    label {
+      font-weight: 600;
+      display: block;
+      margin-top: 15px;
+      margin-bottom: 6px;
+      color: #333;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 15px;
+      background: #f8f9fa;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      margin-top: 15px;
+      background: #0052cc;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #003d99;
+    }
+
+    button:disabled {
+      background: #aaa;
+      cursor: not-allowed;
+    }
+
+    .btn-config {
+      background: #6c757d;
+      font-size: 14px;
+      padding: 10px;
+      margin-top: 10px;
+    }
+
+    .btn-config:hover {
+      background: #5a6268;
+    }
+
+    #mensagem {
+      text-align: center;
+      margin-top: 15px;
+      font-weight: bold;
+      min-height: 22px;
+    }
+
+    .sucesso {
+      color: #28a745;
+    }
+
+    .erro {
+      color: #dc3545;
+    }
+
+    iframe {
+      display: none;
+    }
   </style>
+
 </head>
+
 <body>
+
   <div class="container">
-    <h2>Lançamento de Materiais</h2>
-    <form id="formSuprimentos"
-          action="https://script.google.com/macros/s/AKfycbzeQIKavSpQwbTW0rP_f8rjVzHaQ77QgkZChmM7xEDviAGQ_EFSS6s5YPd20De2Am0Y/exec" <!-- IMPORTANTE: tem que terminar com /exec -->
-          method="POST"
-          target="iframe_oculto">
 
-      <label for="nome">Nome do Colaborador</label>
-      <input type="text" id="nome" name="nome" required>
+```
+<h2>Lançamento de Materiais</h2>
 
-      <label for="area">Área / Setor</label>
-      <input type="text" id="area" name="area" required>
+<form
+  id="formSuprimentos"
+  action="https://script.google.com/macros/s/AKfycbzeQIKavSpQwbTW0rP_f8rjVzHaQ77QgkZChmM7xEDviAGQ_EFSS6s5YPd20De2Am0Y/exec"
+  method="POST"
+  target="iframe_oculto"
+>
 
-      <label for="qtd">Qtnd.</label>
-      <input type="number" id="qtd" name="qtd" min="1" value="1" required>
+  <label for="nome">Nome do Colaborador</label>
+  <input
+    type="text"
+    id="nome"
+    name="nome"
+    required
+  >
 
-      <label for="produto">Produto</label>
-      <select id="produto" name="produto" required>
-        <option value="">Selecione o material</option>
-        <option value="Apontador">Apontador</option><option value="Barbante">Barbante</option><option value="Bexiga">Bexiga</option>
-        <option value="Caderno grande">Caderno grande</option><option value="Caderno Médio">Caderno Médio</option><option value="Caderno pequeno">Caderno pequeno</option>
-        <option value="Caixa De arquivo">Caixa De arquivo</option><option value="Caneta">Caneta</option><option value="Cartolina">Cartolina</option>
-        <option value="Clipes">Clipes</option><option value="Cola">Cola</option><option value="Cola Bastão">Cola Bastão</option>
-        <option value="Copo Azul">Copo Azul</option><option value="Copo Branco">Copo Branco</option><option value="Elástico">Elástico</option>
-        <option value="Etiqueta">Etiqueta</option><option value="Fita crepe">Fita crepe</option><option value="Fita de embalagens">Fita de embalagens</option>
-        <option value="Fita Embalagem">Fita Embalagem</option><option value="Fita Zebrada">Fita Zebrada</option><option value="Flipchart">Flipchart</option>
-        <option value="Grampeador">Grampeador</option><option value="Grampos">Grampos</option><option value="Guardanapo">Guardanapo</option>
-        <option value="Lápis">Lápis</option><option value="Linha De Pesca">Linha De Pesca</option><option value="Marca texto">Marca texto</option>
-        <option value="Papel Pardo">Papel Pardo</option><option value="Pasta De Documentos">Pasta De Documentos</option><option value="Pilha AA">Pilha AA</option>
-        <option value="Pilha AAA">Pilha AAA</option><option value="Pincel atômico">Pincel atômico</option><option value="Pincel permanente">Pincel permanente</option>
-        <option value="Pincel Quadro branco">Pincel Quadro branco</option><option value="Post It">Post It</option><option value="Régua">Régua</option>
-        <option value="Super bonder">Super bonder</option><option value="Sulfite ( 50 folhas)">Sulfite ( 50 folhas)</option><option value="Tesoura">Tesoura</option>
-      </select>
+  <label for="area">Área / Setor</label>
+  <input
+    type="text"
+    id="area"
+    name="area"
+    required
+  >
 
-      <button type="submit" id="btnEnviar">Lançar</button>
-      <button type="button" class="btn-config" onclick="mostrarConfig()">Configurações</button>
-      <div id="mensagem"></div>
-    </form>
+  <label for="qtd">Qtnd.</label>
+  <input
+    type="number"
+    id="qtd"
+    name="qtd"
+    min="1"
+    value="1"
+    required
+  >
+
+  <label for="produto">Produto</label>
+
+  <select id="produto" name="produto" required>
+
+    <option value="">Selecione o material</option>
+
+    <option value="Apontador">Apontador</option>
+    <option value="Barbante">Barbante</option>
+    <option value="Bexiga">Bexiga</option>
+    <option value="Caderno grande">Caderno grande</option>
+    <option value="Caderno Médio">Caderno Médio</option>
+    <option value="Caderno pequeno">Caderno pequeno</option>
+    <option value="Caixa De arquivo">Caixa De arquivo</option>
+    <option value="Caneta">Caneta</option>
+    <option value="Cartolina">Cartolina</option>
+    <option value="Clipes">Clipes</option>
+    <option value="Cola">Cola</option>
+    <option value="Cola Bastão">Cola Bastão</option>
+    <option value="Copo Azul">Copo Azul</option>
+    <option value="Copo Branco">Copo Branco</option>
+    <option value="Elástico">Elástico</option>
+    <option value="Etiqueta">Etiqueta</option>
+    <option value="Fita crepe">Fita crepe</option>
+    <option value="Fita de embalagens">Fita de embalagens</option>
+    <option value="Fita Embalagem">Fita Embalagem</option>
+    <option value="Fita Zebrada">Fita Zebrada</option>
+    <option value="Flipchart">Flipchart</option>
+    <option value="Grampeador">Grampeador</option>
+    <option value="Grampos">Grampos</option>
+    <option value="Guardanapo">Guardanapo</option>
+    <option value="Lápis">Lápis</option>
+    <option value="Linha De Pesca">Linha De Pesca</option>
+    <option value="Marca texto">Marca texto</option>
+    <option value="Papel Pardo">Papel Pardo</option>
+    <option value="Pasta De Documentos">Pasta De Documentos</option>
+    <option value="Pilha AA">Pilha AA</option>
+    <option value="Pilha AAA">Pilha AAA</option>
+    <option value="Pincel atômico">Pincel atômico</option>
+    <option value="Pincel permanente">Pincel permanente</option>
+    <option value="Pincel Quadro branco">Pincel Quadro branco</option>
+    <option value="Post It">Post It</option>
+    <option value="Régua">Régua</option>
+    <option value="Super bonder">Super bonder</option>
+    <option value="Sulfite ( 50 folhas)">Sulfite ( 50 folhas)</option>
+    <option value="Tesoura">Tesoura</option>
+
+  </select>
+
+  <button type="submit" id="btnEnviar">
+    Lançar
+  </button>
+
+  <button
+    type="button"
+    class="btn-config"
+    onclick="mostrarConfig()"
+  >
+    Configurações
+  </button>
+
+  <div id="mensagem"></div>
+
+</form>
+```
+
   </div>
 
   <iframe name="iframe_oculto"></iframe>
 
   <script>
+
     const form = document.getElementById("formSuprimentos");
     const btn = document.getElementById("btnEnviar");
     const msg = document.getElementById("mensagem");
 
-    form.addEventListener("submit", () => {
-      btn.disabled = true; 
-      btn.textContent = "Enviando..."; 
+    form.addEventListener("submit", function() {
+
+      btn.disabled = true;
+      btn.textContent = "Enviando...";
       msg.textContent = "";
-      
-      // Como não conseguimos ler o iframe por causa do Google, assumimos sucesso após 2s
-      setTimeout(() => {
-        msg.textContent = "Lançamento registrado com sucesso!"; 
+      msg.className = "";
+
+      /*
+        O formulário é enviado diretamente para o Google Apps Script.
+        O iframe recebe a resposta sem sair da página.
+      */
+
+      setTimeout(function() {
+
+        msg.textContent = "Lançamento enviado!";
         msg.className = "sucesso";
-        form.reset(); 
+
+        form.reset();
+
         document.getElementById("qtd").value = 1;
-        btn.disabled = false; 
+
+        btn.disabled = false;
         btn.textContent = "Lançar";
+
       }, 2000);
+
     });
 
-    function mostrarConfig(){ 
-      alert("Versão 1.0\nDesenvolvido por Ana Laura Aparecida Pereira Costa\nFacilities - Compras Corporativas"); 
+
+    function mostrarConfig() {
+
+      alert(
+        "Versão 1.0\n" +
+        "Desenvolvido por Ana Laura Aparecida Pereira Costa\n" +
+        "Facilities - Compras Corporativas"
+      );
+
     }
+
   </script>
+
 </body>
 </html>
